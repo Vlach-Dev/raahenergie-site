@@ -562,6 +562,17 @@ h2 {
 }
 .footer-bottom p { color: #334155; font-size: .8rem; }
 
+.footer-bottom .signature {
+  color: rgba(148, 163, 184, .45);
+  transition: color var(--transition), opacity var(--transition);
+}
+.footer-bottom .signature a {
+  color: inherit;
+  font-weight: 600;
+}
+.footer-bottom .signature:hover { color: rgba(148, 163, 184, .95); }
+.footer-bottom .signature a:hover { color: #60a5fa; }
+
 /* ===== WHATSAPP ===== */
 .btn-whatsapp {
   background: #25d366;
