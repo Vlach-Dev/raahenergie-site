@@ -1,0 +1,41 @@
+name: Deploy to HostGate
+
+# Publishes the site to raahenergie.ro on every push to main.
+# Only files that changed since the last deploy are uploaded (tracked in
+# .ftp-deploy-sync-state.json on the server).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Upload changed files over FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          # s2.hostgate.ro is the hosting server's own name, so its TLS certificate can be verified strictly.
+          server: s2.hostgate.ro
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          security: strict
+          # The FTP account's home directory must be the site folder (where index.html lives).
+          server-dir: ./
+          exclude: |
+            **/.git*
+            **/.git*/**
+            start-server.bat
+            Start Server.command
